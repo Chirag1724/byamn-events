@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Byamn Events
 
-## Getting Started
+> **Summer Web Development Internship 2026 — Full Stack Project**
 
-First, run the development server:
+A production-ready **Event Registration & Management System** inspired by platforms like [Luma](https://lu.ma). Hosts can create and manage events, view attendee registrations, and export attendee lists as CSV. Attendees can browse events, register (creating an account in the process), log in, and cancel registrations — all without admin involvement.
+
+---
+
+## Features
+
+### Host
+- Sign up and log in securely via **NextAuth.js**
+- Create events with title, description, date, time, location, optional capacity, and registration cutoff
+- Protected dashboard — view all registrations (**Name + Email only** — passwords never exposed)
+- Manually close or delete events
+- Export attendee list as **CSV** (Name + Email)
+- Registration count shown per event
+
+### Attendee
+- Browse all public events — no login required
+- Register for an event by providing Name, Email, and Password (account created on the spot)
+- Log in to view all registered events
+- Cancel a registration from the "My Events" page
+
+### Bonus Features Implemented
+- Duplicate registration prevention (same email cannot register twice per event)
+- Auto-close registration when event capacity is reached
+- Registration cutoff date/time enforcement
+- Live attendee count on public event pages
+- Search / filter attendees in the host dashboard
+- Responsive and polished dark-mode UI
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | **Next.js 16** (App Router) |
+| Frontend Library | **React 19** |
+| Language | **TypeScript 5** — zero `any` types |
+| Styling | **Tailwind CSS v4** + **Radix UI** (shadcn/ui) |
+| Database | **MongoDB** + Mongoose |
+| Authentication | **NextAuth.js v5** (hosts) + **jose JWT** (attendees) |
+| Validation | **Zod** + React Hook Form |
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── (auth)/          # Host & attendee login/register pages
+│   ├── (host)/          # Protected host dashboard + event management
+│   ├── (attendee)/      # Protected attendee "My Events" page
+│   ├── (public)/        # Public event browse + event detail pages
+│   └── api/             # REST API routes
+├── components/          # Reusable UI components
+├── models/              # Mongoose schemas (Host, Attendee, Event, Registration)
+├── services/            # Business logic layer
+├── validators/          # Zod validation schemas
+├── types/               # TypeScript types
+└── lib/                 # DB connection, auth config, utilities
+```
+
+---
+
+## Getting Started (Local Development)
+
+### Prerequisites
+- **Node.js** v18+
+- **MongoDB** — local instance OR [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) free tier
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Chirag1724/byamn-events.git
+```
+
+### 2. Set up environment variables
+
+```bash
+cp .env.example .env.local
+```
+
+Open `.env.local` and fill in the values:
+
+```env
+# MongoDB connection string
+MONGODB_URI=mongodb://localhost:27017/byamn-events
+
+# NextAuth.js v5 secret — generate with: openssl rand -base64 32
+AUTH_SECRET=your_auth_secret_here
+
+# Custom JWT secret for attendee sessions — generate with: openssl rand -base64 32
+JWT_SECRET=your_jwt_secret_here
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment (Vercel)
 
-## Learn More
+1. Push to a public GitHub repository
+2. Import the repo at [vercel.com](https://vercel.com)
+3. Add the three environment variables (`MONGODB_URI`, `AUTH_SECRET`, `JWT_SECRET`) in the Vercel dashboard
+4. Deploy — Vercel auto-detects Next.js
 
-To learn more about Next.js, take a look at the following resources:
+> **Note:** Use [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) for the live deployment.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Security Notes
 
-## Deploy on Vercel
+- Attendee and host passwords are **hashed with bcrypt** — never stored in plain text
+- Passwords are **never returned** by any API endpoint or included in CSV exports
+- The host dashboard only shows **Name + Email** of attendees
+- Host routes are protected by NextAuth.js session; attendee routes are protected by a signed JWT cookie
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Available Scripts
+
+| Script | Description |
+|---|---|
+| `npm run dev` | Start development server (Turbopack) |
+| `npm run build` | Build production bundle |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npx tsc --noEmit` | TypeScript type check |
