@@ -1,10 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner';
-import { Search, Users } from 'lucide-react';
+import { Search, Users, Mail, User } from 'lucide-react';
 import type { RegistrationRow } from '@/types/api.types';
 
 interface RegistrationsTableProps {
@@ -12,7 +19,7 @@ interface RegistrationsTableProps {
 }
 
 function formatDate(date: Date | string) {
-  return new Date(date).toLocaleString('en-US', {
+  return new Date(date).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -50,51 +57,80 @@ export function RegistrationsTable({ eventId }: RegistrationsTableProps) {
 
   return (
     <div className="space-y-4">
-      {/* Search */}
+      {/* Search bar */}
       <div className="relative">
-        <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+        <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" />
         <Input
           placeholder="Search by name or email…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="pl-9 border-white/10 bg-zinc-800/60 text-white placeholder:text-zinc-500 focus:border-violet-500"
+          className="border-white/8 bg-white/4 pl-9 text-sm text-white placeholder:text-zinc-700 focus:border-violet-500/40 focus:bg-white/6 focus:ring-0"
         />
       </div>
 
       {filtered.length === 0 ? (
+        /* Empty state */
         <div className="flex flex-col items-center gap-3 py-16 text-center">
-          <Users size={36} className="text-zinc-600" />
-          <p className="text-sm text-zinc-500">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/4 ring-1 ring-white/8">
+            <Users size={20} className="text-zinc-600" />
+          </div>
+          <p className="text-sm text-zinc-600">
             {registrations.length === 0
               ? 'No registrations yet'
               : 'No results match your search'}
           </p>
         </div>
       ) : (
-        <div className="rounded-lg border border-white/10 overflow-hidden">
+        <div className="overflow-hidden rounded-xl border border-white/7">
           <Table>
             <TableHeader>
-              <TableRow className="border-white/10 hover:bg-transparent">
-                <TableHead className="text-zinc-400 font-medium">Name</TableHead>
-                <TableHead className="text-zinc-400 font-medium">Email</TableHead>
-                <TableHead className="text-zinc-400 font-medium">Registered at</TableHead>
+              <TableRow className="border-b border-white/7 bg-white/2 hover:bg-transparent">
+                <TableHead className="h-10 text-xs font-semibold uppercase tracking-wider text-zinc-600">
+                  <div className="flex items-center gap-1.5">
+                    <User size={11} />
+                    Name
+                  </div>
+                </TableHead>
+                <TableHead className="h-10 text-xs font-semibold uppercase tracking-wider text-zinc-600">
+                  <div className="flex items-center gap-1.5">
+                    <Mail size={11} />
+                    Email
+                  </div>
+                </TableHead>
+                <TableHead className="h-10 text-xs font-semibold uppercase tracking-wider text-zinc-600">
+                  Registered
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {filtered.map((r, i) => (
                 <TableRow
                   key={`${r.email}-${i}`}
-                  className="border-white/5 hover:bg-zinc-800/40"
+                  className={`border-b border-white/4 transition-colors hover:bg-white/2 ${
+                    i % 2 === 0 ? 'bg-transparent' : 'bg-white/1'
+                  }`}
                 >
-                  <TableCell className="text-zinc-200 font-medium">{r.name}</TableCell>
-                  <TableCell className="text-zinc-400">{r.email}</TableCell>
-                  <TableCell className="text-zinc-500 text-sm">{formatDate(r.registeredAt)}</TableCell>
+                  <TableCell className="py-3 font-medium text-zinc-200">
+                    {r.name}
+                  </TableCell>
+                  <TableCell className="py-3 text-zinc-400">
+                    {r.email}
+                  </TableCell>
+                  <TableCell className="py-3 text-xs text-zinc-600">
+                    {formatDate(r.registeredAt)}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-          <div className="border-t border-white/5 px-4 py-3 text-xs text-zinc-500">
-            {filtered.length} of {registrations.length} attendee{registrations.length !== 1 ? 's' : ''}
+          {/* Footer count */}
+          <div className="flex items-center justify-between border-t border-white/5 bg-white/1 px-4 py-2.5 text-xs text-zinc-700">
+            <span>
+              {filtered.length === registrations.length
+                ? `${registrations.length} attendee${registrations.length !== 1 ? 's' : ''}`
+                : `${filtered.length} of ${registrations.length} attendees`}
+            </span>
+            <span className="text-zinc-800">Name · Email only — no passwords</span>
           </div>
         </div>
       )}

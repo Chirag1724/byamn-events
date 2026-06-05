@@ -4,6 +4,8 @@
 
 A production-ready **Event Registration & Management System** inspired by platforms like [Luma](https://lu.ma). Hosts can create and manage events, view attendee registrations, and export attendee lists as CSV. Attendees can browse events, register (creating an account in the process), log in, and cancel registrations — all without admin involvement.
 
+**Live Demo:** [byamn-events.vercel.app](https://byamn-events.vercel.app/) &nbsp;|&nbsp; **Repository:** [github.com/Chirag1724/byamn-events](https://github.com/Chirag1724/byamn-events)
+
 ---
 
 ## Features
@@ -76,6 +78,7 @@ src/
 
 ```bash
 git clone https://github.com/Chirag1724/byamn-events.git
+cd byamn-events
 ```
 
 ### 2. Set up environment variables
@@ -113,14 +116,16 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## Deployment (Vercel)
+## Deployment
 
-1. Push to a public GitHub repository
+**Live URL:** [https://byamn-events.vercel.app/](https://byamn-events.vercel.app/)
+
+Deployed on **Vercel** with **MongoDB Atlas** (free tier). To deploy your own instance:
+
+1. Fork the [repository](https://github.com/Chirag1724/byamn-events)
 2. Import the repo at [vercel.com](https://vercel.com)
 3. Add the three environment variables (`MONGODB_URI`, `AUTH_SECRET`, `JWT_SECRET`) in the Vercel dashboard
 4. Deploy — Vercel auto-detects Next.js
-
-> **Note:** Use [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) for the live deployment.
 
 ---
 

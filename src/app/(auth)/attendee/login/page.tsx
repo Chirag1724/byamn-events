@@ -6,11 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Eye, EyeOff, CalendarDays } from 'lucide-react';
+import { Eye, EyeOff, CalendarDays, Mail, Lock, Loader2, ArrowRight, Ticket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { loginAttendeeSchema, type LoginAttendeeInput } from '@/validators/attendee.validator';
 
 export default function AttendeeLoginPage() {
@@ -48,84 +47,122 @@ export default function AttendeeLoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-950 px-4 py-16">
-      <div className="w-full max-w-md">
-        <div className="mb-8 flex items-center justify-center gap-2 text-xl font-bold text-white">
-          <CalendarDays size={24} className="text-violet-400" />
-          Byamn Events
-        </div>
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#080808] px-4 py-16">
+      {/* Background glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/10 blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 h-[300px] w-[300px] rounded-full bg-fuchsia-700/8 blur-[100px]" />
+      </div>
+      <div className="dot-grid pointer-events-none absolute inset-0 opacity-20" />
 
-        <Card className="border-white/10 bg-zinc-900/80 shadow-2xl backdrop-blur-sm">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-2xl font-bold text-white">Attendee sign in</CardTitle>
-            <CardDescription className="text-zinc-400">
+      <div className="relative z-10 w-full max-w-md animate-fade-up">
+        {/* Brand */}
+        <Link href="/" className="mb-10 flex items-center justify-center gap-2.5 group">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/15 ring-1 ring-violet-500/30 transition-all group-hover:ring-violet-500/50">
+            <CalendarDays size={18} className="text-violet-400" />
+          </div>
+          <span className="text-lg font-semibold text-white">
+            Byamn <span className="font-normal text-zinc-500">Events</span>
+          </span>
+        </Link>
+
+        {/* Card */}
+        <div className="glass gradient-border rounded-2xl p-8">
+          {/* Header */}
+          <div className="mb-7">
+            <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/12 ring-1 ring-violet-500/20">
+              <Ticket size={18} className="text-violet-400" />
+            </div>
+            <h1 className="text-2xl font-bold text-white">Attendee sign in</h1>
+            <p className="mt-1.5 text-sm text-zinc-500">
               View and manage your event registrations
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
-              <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-zinc-300">Email</Label>
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+            {/* Email */}
+            <div className="space-y-1.5">
+              <Label htmlFor="al-email" className="text-sm font-medium text-zinc-300">
+                Email address
+              </Label>
+              <div className="relative">
+                <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
                 <Input
-                  id="email"
+                  id="al-email"
                   type="email"
                   placeholder="you@example.com"
                   {...register('email')}
-                  className="border-white/10 bg-zinc-800/60 text-white placeholder:text-zinc-500 focus:border-violet-500"
+                  className="border-white/8 bg-white/4 pl-10 text-white placeholder:text-zinc-600 transition-colors focus:border-violet-500/60 focus:bg-white/6 focus:ring-0"
                 />
-                {errors.email && (
-                  <p className="text-xs text-red-400">{errors.email.message}</p>
-                )}
               </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-zinc-300">Password</Label>
-                <div className="relative">
-                  <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Your password"
-                    {...register('password')}
-                    className="border-white/10 bg-zinc-800/60 pr-10 text-white placeholder:text-zinc-500 focus:border-violet-500"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-                {errors.password && (
-                  <p className="text-xs text-red-400">{errors.password.message}</p>
-                )}
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-violet-600 font-semibold text-white hover:bg-violet-500 disabled:opacity-60"
-              >
-                {isSubmitting ? 'Signing in…' : 'Sign in'}
-              </Button>
-            </form>
-
-            <div className="mt-6 space-y-2 text-center text-sm text-zinc-500">
-              <p>
-                Don&apos;t have an account?{' '}
-                <Link href="/events" className="text-violet-400 hover:text-violet-300 hover:underline">
-                  Register via an event
-                </Link>
-              </p>
-              <p>
-                <Link href="/events" className="text-zinc-400 hover:text-zinc-300 hover:underline">
-                  Browse events →
-                </Link>
-              </p>
+              {errors.email && (
+                <p className="animate-fade-in text-xs text-red-400">{errors.email.message}</p>
+              )}
             </div>
-          </CardContent>
-        </Card>
+
+            {/* Password */}
+            <div className="space-y-1.5">
+              <Label htmlFor="al-password" className="text-sm font-medium text-zinc-300">
+                Password
+              </Label>
+              <div className="relative">
+                <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500" />
+                <Input
+                  id="al-password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Your password"
+                  {...register('password')}
+                  className="border-white/8 bg-white/4 pl-10 pr-10 text-white placeholder:text-zinc-600 transition-colors focus:border-violet-500/60 focus:bg-white/6 focus:ring-0"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 transition-colors hover:text-zinc-300"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="animate-fade-in text-xs text-red-400">{errors.password.message}</p>
+              )}
+            </div>
+
+            {/* Submit */}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="mt-1 w-full bg-violet-600 font-semibold text-white shadow-lg shadow-violet-900/30 transition-all hover:bg-violet-500 hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0"
+            >
+              {isSubmitting ? (
+                <><Loader2 size={15} className="mr-2 animate-spin" />Signing in…</>
+              ) : (
+                <>Sign in<ArrowRight size={15} className="ml-2" /></>
+              )}
+            </Button>
+          </form>
+
+          <div className="mt-6 border-t border-white/6 pt-5 space-y-2 text-center text-sm text-zinc-600">
+            <p>
+              No account yet?{' '}
+              <Link href="/events" className="text-violet-400 transition-colors hover:text-violet-300">
+                Register via an event
+              </Link>
+            </p>
+            <p>
+              <Link href="/events" className="text-zinc-500 transition-colors hover:text-zinc-400">
+                Browse events →
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        <p className="mt-5 text-center text-xs text-zinc-700">
+          Are you a host?{' '}
+          <Link href="/host/login" className="text-zinc-500 hover:text-zinc-400 transition-colors">
+            Host sign in →
+          </Link>
+        </p>
       </div>
     </div>
   );

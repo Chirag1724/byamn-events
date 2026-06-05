@@ -17,7 +17,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={cn('h-full antialiased', inter.variable)}>
+    <html lang="en" className={cn('h-full antialiased dark', inter.variable)}>
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100 font-sans">
         <SessionProvider>
           {children}

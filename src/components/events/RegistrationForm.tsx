@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
-import { Eye, EyeOff, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, CheckCircle2, User, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -66,7 +66,7 @@ export function RegistrationForm({ eventId, onSuccess }: RegistrationFormProps) 
       }
 
       setRegistered(true);
-      toast.success('You\'re registered!');
+      toast.success("You're registered!");
       onSuccess?.();
     } catch {
       toast.error('Something went wrong. Please try again.');
@@ -75,16 +75,20 @@ export function RegistrationForm({ eventId, onSuccess }: RegistrationFormProps) 
 
   if (registered) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-xl border border-green-800/40 bg-green-900/20 p-8 text-center">
-        <CheckCircle2 size={40} className="text-green-400" />
-        <h3 className="text-lg font-semibold text-white">You&apos;re registered!</h3>
-        <p className="text-sm text-zinc-400">
-          Log in to view and manage your event registrations.
-        </p>
+      <div className="animate-fade-up flex flex-col items-center gap-4 rounded-xl border border-green-500/20 bg-green-500/6 p-8 text-center">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500/15 ring-2 ring-green-500/20">
+          <CheckCircle2 size={28} className="text-green-400" />
+        </div>
+        <div>
+          <h3 className="text-base font-semibold text-white">You&apos;re registered!</h3>
+          <p className="mt-1 text-sm text-zinc-400">
+            Log in to view and manage your event registrations.
+          </p>
+        </div>
         <Button
           asChild
           size="sm"
-          className="bg-violet-600 text-white hover:bg-violet-500"
+          className="bg-green-600/80 text-white hover:bg-green-600 border-0 transition-all hover:-translate-y-px"
         >
           <a href="/attendee/login">View my events →</a>
         </Button>
@@ -94,73 +98,105 @@ export function RegistrationForm({ eventId, onSuccess }: RegistrationFormProps) 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
+      {/* Name */}
       <div className="space-y-1.5">
-        <Label htmlFor="reg-name" className="text-zinc-300">Full name</Label>
-        <Input
-          id="reg-name"
-          placeholder="Jane Doe"
-          {...register('name')}
-          className="border-white/10 bg-zinc-800/60 text-white placeholder:text-zinc-500 focus:border-violet-500"
-        />
-        {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="reg-email" className="text-zinc-300">Email</Label>
-        <Input
-          id="reg-email"
-          type="email"
-          placeholder="you@example.com"
-          {...register('email')}
-          className="border-white/10 bg-zinc-800/60 text-white placeholder:text-zinc-500 focus:border-violet-500"
-        />
-        {errors.email && <p className="text-xs text-red-400">{errors.email.message}</p>}
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="reg-password" className="text-zinc-300">
-          Password <span className="text-zinc-600">(creates your attendee account)</span>
+        <Label htmlFor="reg-name" className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          Full name
         </Label>
         <div className="relative">
+          <User size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" />
+          <Input
+            id="reg-name"
+            placeholder="Jane Doe"
+            {...register('name')}
+            className="border-white/8 bg-white/4 pl-10 text-sm text-white placeholder:text-zinc-600 transition-colors focus:border-violet-500/50 focus:bg-white/6 focus:ring-0"
+          />
+        </div>
+        {errors.name && (
+          <p className="animate-fade-in text-xs text-red-400">{errors.name.message}</p>
+        )}
+      </div>
+
+      {/* Email */}
+      <div className="space-y-1.5">
+        <Label htmlFor="reg-email" className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          Email address
+        </Label>
+        <div className="relative">
+          <Mail size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" />
+          <Input
+            id="reg-email"
+            type="email"
+            placeholder="you@example.com"
+            {...register('email')}
+            className="border-white/8 bg-white/4 pl-10 text-sm text-white placeholder:text-zinc-600 transition-colors focus:border-violet-500/50 focus:bg-white/6 focus:ring-0"
+          />
+        </div>
+        {errors.email && (
+          <p className="animate-fade-in text-xs text-red-400">{errors.email.message}</p>
+        )}
+      </div>
+
+      {/* Password */}
+      <div className="space-y-1.5">
+        <Label htmlFor="reg-password" className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          Password
+          <span className="ml-1.5 normal-case text-zinc-700">(creates your account)</span>
+        </Label>
+        <div className="relative">
+          <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" />
           <Input
             id="reg-password"
             type={showPassword ? 'text' : 'password'}
             placeholder="Min. 8 characters"
             {...register('password')}
-            className="border-white/10 bg-zinc-800/60 pr-10 text-white placeholder:text-zinc-500 focus:border-violet-500"
+            className="border-white/8 bg-white/4 pl-10 pr-10 text-sm text-white placeholder:text-zinc-600 transition-colors focus:border-violet-500/50 focus:bg-white/6 focus:ring-0"
           />
           <button
             type="button"
             onClick={() => setShowPassword((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 transition-colors hover:text-zinc-400"
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
-            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
           </button>
         </div>
-        {errors.password && <p className="text-xs text-red-400">{errors.password.message}</p>}
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="reg-confirm" className="text-zinc-300">Confirm password</Label>
-        <Input
-          id="reg-confirm"
-          type={showPassword ? 'text' : 'password'}
-          placeholder="Repeat password"
-          {...register('confirmPassword')}
-          className="border-white/10 bg-zinc-800/60 text-white placeholder:text-zinc-500 focus:border-violet-500"
-        />
-        {errors.confirmPassword && (
-          <p className="text-xs text-red-400">{errors.confirmPassword.message}</p>
+        {errors.password && (
+          <p className="animate-fade-in text-xs text-red-400">{errors.password.message}</p>
         )}
       </div>
 
+      {/* Confirm Password */}
+      <div className="space-y-1.5">
+        <Label htmlFor="reg-confirm" className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+          Confirm password
+        </Label>
+        <div className="relative">
+          <Lock size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-600" />
+          <Input
+            id="reg-confirm"
+            type={showPassword ? 'text' : 'password'}
+            placeholder="Repeat password"
+            {...register('confirmPassword')}
+            className="border-white/8 bg-white/4 pl-10 text-sm text-white placeholder:text-zinc-600 transition-colors focus:border-violet-500/50 focus:bg-white/6 focus:ring-0"
+          />
+        </div>
+        {errors.confirmPassword && (
+          <p className="animate-fade-in text-xs text-red-400">{errors.confirmPassword.message}</p>
+        )}
+      </div>
+
+      {/* Submit */}
       <Button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-violet-600 font-semibold text-white hover:bg-violet-500 disabled:opacity-60"
+        className="w-full bg-violet-600 font-semibold text-white shadow-lg shadow-violet-900/25 transition-all hover:bg-violet-500 hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0"
       >
-        {isSubmitting ? 'Registering…' : 'Register for this event'}
+        {isSubmitting ? (
+          <><Loader2 size={15} className="mr-2 animate-spin" />Registering…</>
+        ) : (
+          <>Register for this event<ArrowRight size={15} className="ml-2" /></>
+        )}
       </Button>
     </form>
   );
