@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -33,10 +33,20 @@ export function RegistrationForm({ eventId, onSuccess }: RegistrationFormProps) 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<RegistrationFormInput>({
     resolver: zodResolver(registrationFormSchema),
   });
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedName = localStorage.getItem('byamn_attendee_name');
+      const savedEmail = localStorage.getItem('byamn_attendee_email');
+      if (savedName) setValue('name', savedName);
+      if (savedEmail) setValue('email', savedEmail);
+    }
+  }, [setValue]);
 
   const onSubmit = async (data: RegistrationFormInput) => {
     try {
@@ -67,6 +77,10 @@ export function RegistrationForm({ eventId, onSuccess }: RegistrationFormProps) 
 
       setRegistered(true);
       toast.success("You're registered!");
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('byamn_attendee_name', data.name);
+        localStorage.setItem('byamn_attendee_email', data.email);
+      }
       onSuccess?.();
     } catch {
       toast.error('Something went wrong. Please try again.');

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getEventBySlug } from '@/services/event.service';
 import { Navbar } from '@/components/shared/Navbar';
+import { Footer } from '@/components/shared/Footer';
 import { RegistrationForm } from '@/components/events/RegistrationForm';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, MapPin, Users, AlertTriangle, Lock } from 'lucide-react';
@@ -189,6 +190,7 @@ export default async function EventPage({ params }: PageProps) {
 
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

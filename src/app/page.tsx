@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Navbar } from '@/components/shared/Navbar';
+import { Footer } from '@/components/shared/Footer';
 import { Button } from '@/components/ui/button';
 import {
   CalendarDays,
@@ -218,13 +219,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer className="border-t border-white/5 bg-[#080808] py-8 text-center text-sm text-zinc-600">
-        <div className="flex flex-col items-center gap-1">
-          <span>© {new Date().getFullYear()} Byamn Events</span>
-          <span className="text-zinc-700">Built for the BYAMN Summer Internship 2026</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, Search, ArrowRight, Ticket } from 'lucide-react';
+import { CalendarDays, Search, ArrowRight, Ticket, ArrowLeft } from 'lucide-react';
 
 export default function AttendeeRegisterPage() {
   return (
@@ -11,7 +11,20 @@ export default function AttendeeRegisterPage() {
       </div>
       <div className="dot-grid pointer-events-none absolute inset-0 opacity-20" />
 
-      <div className="relative z-10 w-full max-w-md animate-fade-up text-center">
+      <div className="relative z-10 w-full max-w-md animate-fade-up">
+        {/* Back Button */}
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className="mb-6 -ml-2 text-zinc-500 hover:text-white"
+        >
+          <Link href="/">
+            <ArrowLeft size={14} className="mr-1.5" />
+            Back to Home
+          </Link>
+        </Button>
+
         {/* Brand */}
         <Link href="/" className="mb-10 flex items-center justify-center gap-2.5 group">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/15 ring-1 ring-violet-500/30 transition-all group-hover:ring-violet-500/50">
@@ -23,7 +36,7 @@ export default function AttendeeRegisterPage() {
         </Link>
 
         {/* Card */}
-        <div className="glass gradient-border rounded-2xl p-10">
+        <div className="glass gradient-border rounded-2xl p-10 text-center">
           {/* Icon */}
           <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-500/12 ring-1 ring-violet-500/20 mx-auto">
             <Ticket size={28} className="text-violet-400" />

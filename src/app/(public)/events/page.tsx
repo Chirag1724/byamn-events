@@ -3,6 +3,7 @@ import connectDB from '@/lib/db/mongodb';
 import Event from '@/models/Event.model';
 import Registration from '@/models/Registration.model';
 import { Navbar } from '@/components/shared/Navbar';
+import { Footer } from '@/components/shared/Footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Clock, MapPin, Users, Search, ArrowRight, Sparkles } from 'lucide-react';
@@ -203,6 +204,7 @@ export default async function BrowseEventsPage() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { Eye, EyeOff, CalendarDays, Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, CalendarDays, Mail, Lock, Loader2, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -52,6 +52,19 @@ export default function HostLoginPage() {
       <div className="dot-grid pointer-events-none absolute inset-0 opacity-20" />
 
       <div className="relative z-10 w-full max-w-md animate-fade-up">
+        {/* Back Button */}
+        <Button
+          asChild
+          variant="ghost"
+          size="sm"
+          className="mb-6 -ml-2 text-zinc-500 hover:text-white"
+        >
+          <Link href="/">
+            <ArrowLeft size={14} className="mr-1.5" />
+            Back to Home
+          </Link>
+        </Button>
+
         {/* Brand */}
         <Link href="/" className="mb-10 flex items-center justify-center gap-2.5 group">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-500/15 ring-1 ring-violet-500/30 transition-all group-hover:ring-violet-500/50">
