@@ -4,6 +4,8 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from 'sonner';
 import { SessionProvider } from 'next-auth/react';
+import { JsonLd } from "@/components/JsonLd";
+
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -19,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn('h-full antialiased dark', inter.variable)}>
       <body className="min-h-full flex flex-col bg-zinc-950 text-zinc-100 font-sans">
+        <JsonLd />
         <SessionProvider>
           {children}
         </SessionProvider>
